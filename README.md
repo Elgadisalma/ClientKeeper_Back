@@ -9,8 +9,6 @@ ClientKeeper est un backend Spring Boot conçu pour gérer les opérations banca
 2. [Installation](#installation)
 3. [Fonctionnalités](#fonctionnalités)
 4. [Structure du Projet](#structure-du-projet)
-5. [Documentation de l'API](#documentation-de-lapi)
-6. [Contributeurs](#contributeurs)
 
 ---
 
