@@ -1,17 +1,17 @@
 package org.example.clientkeeper.model;
 
 import lombok.Data;
-
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
 
 @Data
 @Entity
-public class Client extends Utilisateur{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+public class Client extends Utilisateur {
     private String nom;
     private String prenom;
     private LocalDate dateNaissance;
@@ -23,6 +23,7 @@ public class Client extends Utilisateur{
     private String phoneNumber;
     private String numeroCompte;
     private String securePin;
+    private int status;
 
     @ManyToMany
     @JoinTable(
@@ -31,4 +32,7 @@ public class Client extends Utilisateur{
             inverseJoinColumns = @JoinColumn(name = "offre_id")
     )
     private Set<Offre> offres;
+
+    public Client() {
+    }
 }

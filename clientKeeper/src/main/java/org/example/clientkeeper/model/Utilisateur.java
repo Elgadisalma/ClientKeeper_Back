@@ -1,10 +1,14 @@
 package org.example.clientkeeper.model;
 
-import jakarta.persistence.*;
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
+import jakarta.persistence.*;
 
 @Data
 @Entity
+@SuperBuilder
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "dtype")
 public class Utilisateur {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,4 +17,8 @@ public class Utilisateur {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public Utilisateur() {
+
+    }
 }
