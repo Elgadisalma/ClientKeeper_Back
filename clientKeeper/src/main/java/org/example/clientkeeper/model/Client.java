@@ -14,6 +14,7 @@ import java.util.Set;
 public class Client extends Utilisateur {
     private String nom;
     private String prenom;
+    private String cin;
     private LocalDate dateNaissance;
     private String adresse;
     private String profession;
