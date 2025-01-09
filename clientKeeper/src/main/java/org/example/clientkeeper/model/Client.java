@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Data
 @Entity
-public class Client {
+public class Client extends Utilisateur{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,8 +21,6 @@ public class Client {
     private Sexe sexe;
     private double solde;
     private String phoneNumber;
-    private String email;
-    private String password;
     private String numeroCompte;
     private String securePin;
 
