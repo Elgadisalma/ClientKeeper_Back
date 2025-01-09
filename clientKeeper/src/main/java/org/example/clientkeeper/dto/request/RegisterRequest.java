@@ -1,12 +1,13 @@
-package org.example.clientkeeper.dto;
+package org.example.clientkeeper.dto.request;
 
 import lombok.Data;
+import java.time.LocalDate;
 import org.example.clientkeeper.model.Sexe;
 
-import java.time.LocalDate;
-
 @Data
-public class ClientDTO {
+public class RegisterRequest {
+    private String email;
+    private String password;
     private String nom;
     private String prenom;
     private String cin;
@@ -14,8 +15,6 @@ public class ClientDTO {
     private String adresse;
     private String profession;
     private Sexe sexe;
-    private double solde;
     private String phoneNumber;
-    private String email;
-    private String numeroCompte;
+    private String securePin;
 }
