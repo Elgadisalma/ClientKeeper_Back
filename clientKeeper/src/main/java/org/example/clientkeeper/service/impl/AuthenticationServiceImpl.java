@@ -9,6 +9,7 @@ import org.example.clientkeeper.model.Role;
 import org.example.clientkeeper.repository.ClientRepository;
 import org.example.clientkeeper.repository.UtilisateurRepository;
 import org.example.clientkeeper.service.AuthenticationService;
+import org.example.clientkeeper.service.HistoriqueConnexionService;
 import org.example.clientkeeper.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,6 +32,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    HistoriqueConnexionService historiqueConnexionService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -92,7 +96,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         int status = 1;
         if (user instanceof Client) {
-            status = ((Client) user).getStatus();
+            Client client = (Client) user;
+            status = client.getStatus();
+
+            historiqueConnexionService.enregistrerConnexion(client);
         }
 
         return AuthenticationResponse.builder()
