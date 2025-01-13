@@ -37,7 +37,6 @@ public class TransactionServiceImpl implements TransactionService {
     public void transferMoney(String senderEmail, TransactionDTO transactionDTO) {
         Utilisateur utilisateur = utilisateurRepository.findByEmail(senderEmail)
                 .orElseThrow(() -> new CustomValidationException("Utilisateur envoyeur introuvable."));
-        
 
         Client sender = clientRepository.findById(utilisateur.getId())
                 .orElseThrow(() -> new CustomValidationException("Client envoyeur introuvable."));
