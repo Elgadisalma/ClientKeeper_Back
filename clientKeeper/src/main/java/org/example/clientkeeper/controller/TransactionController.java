@@ -9,6 +9,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/transactions")
 @RequiredArgsConstructor
@@ -26,4 +30,12 @@ public class TransactionController {
 
         return ResponseEntity.ok("Transaction effectuée avec succès.");
     }
+
+    @GetMapping("/history")
+    public ResponseEntity<Map<LocalDate, List<TransactionDTO>>> getTransactionHistoryGrouped(Authentication authentication) {
+        String userEmail = authentication.getName();
+        Map<LocalDate, List<TransactionDTO>> groupedHistory = transactionService.getUserTransactionHistory(userEmail);
+        return ResponseEntity.ok(groupedHistory);
+    }
+
 }
