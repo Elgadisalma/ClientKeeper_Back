@@ -1,6 +1,6 @@
 package org.example.clientkeeper.model;
 
 public enum Role {
-    admin,
-    client
+    ROLE_ADMIN,
+    ROLE_CLIENT
 }

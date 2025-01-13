@@ -54,7 +54,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var client = Client.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.client)
+                .role(Role.ROLE_CLIENT)
                 .nom(request.getNom())
                 .prenom(request.getPrenom())
                 .cin(request.getCin())

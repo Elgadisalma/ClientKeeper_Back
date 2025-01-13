@@ -2,12 +2,13 @@ package org.example.clientkeeper.service;
 
 import jakarta.transaction.Transactional;
 import org.example.clientkeeper.dto.TransactionDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 public interface TransactionService {
-    @Autowired
-
-
-    @Transactional
+//    @Transactional
     void transferMoney(String senderEmail, TransactionDTO transactionDTO);
+
+    Map<LocalDate, List<TransactionDTO>> getUserTransactionHistory(String userEmail);
 }

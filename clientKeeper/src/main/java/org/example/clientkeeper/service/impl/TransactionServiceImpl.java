@@ -14,7 +14,11 @@ import org.example.clientkeeper.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -41,6 +45,9 @@ public class TransactionServiceImpl implements TransactionService {
         Client sender = clientRepository.findById(utilisateur.getId())
                 .orElseThrow(() -> new CustomValidationException("Client envoyeur introuvable."));
 
+        if (!sender.getSecurePin().equals(transactionDTO.getSecurePin())) {
+            throw new CustomValidationException("Le code PIN sécurisé est incorrect.");
+        }
 
         Client receiver = clientRepository.findByNomAndPrenomAndNumeroCompte(
                         transactionDTO.getReceiverName(),
@@ -69,4 +76,20 @@ public class TransactionServiceImpl implements TransactionService {
 
         transactionRepository.save(transaction);
     }
+
+    @Override
+    public Map<LocalDate, List<TransactionDTO>> getUserTransactionHistory(String userEmail) {
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new CustomValidationException("Utilisateur non trouvé."));
+
+        Client sender = clientRepository.findById(utilisateur.getId())
+                .orElseThrow(() -> new CustomValidationException("Client introuvable."));
+
+        List<Transaction> transactions = transactionRepository.findBySender(sender);
+
+        return transactions.stream()
+                .map(transactionMapper::toDTO)
+                .collect(Collectors.groupingBy(dto -> dto.getDateTransaction().toLocalDate()));
+    }
+
 }
