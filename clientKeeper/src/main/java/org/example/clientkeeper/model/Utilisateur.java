@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.experimental.SuperBuilder;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Data
 @Entity
 @SuperBuilder
@@ -17,6 +19,8 @@ public class Utilisateur {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private String passwordResetToken;
+    private LocalDateTime tokenExpiryDate;
 
     public Utilisateur() {
 
