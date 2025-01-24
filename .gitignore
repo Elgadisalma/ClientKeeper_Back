@@ -1,0 +1,19 @@
+# Ignorer l'environnement virtuel
+env/
+venv/
+
+# Ignorer les fichiers de log
+*.log
+
+# Ignorer les fichiers Python compilés
+__pycache__/
+*.pyc
+*.pkl
+
+# Ignorer les fichiers de distribution
+dist/
+build/
+
+# Ignorer les fichiers de configuration d'IDE (par exemple PyCharm ou VSCode)
+.idea/
+.vscode/
