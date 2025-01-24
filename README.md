@@ -17,7 +17,7 @@ Avant de démarrer, assurez-vous d’avoir installé les éléments suivants :
 - [Java 17+](https://www.oracle.com/java/technologies/javase-downloads.html)
 - [Maven 3.8+](https://maven.apache.org/)
 - [PostgreSQL 12+](https://www.postgresql.org/download/)
-- [Python 3.8+](nécessaire pour l'IA)
+- [Python 3.8+](https://www.python.org/downloads/windows/) (nécessaire pour l'IA)
 - [Docker](https://www.docker.com/) (optionnel pour la base de données)
 
 ---
