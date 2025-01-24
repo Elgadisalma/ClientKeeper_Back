@@ -9,5 +9,4 @@ public class OffreDTO {
     private LocalDate dateCreation;
     private LocalDate dateExpiration;
     private String description;
-    private boolean status;
 }

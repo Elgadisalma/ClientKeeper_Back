@@ -1,0 +1,13 @@
+package org.example.clientkeeper.service;
+
+import org.example.clientkeeper.dto.OffreDTO;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface OffreService {
+    OffreDTO addOffre(OffreDTO offreDTO);
+    void deleteOffre(Long id);
+    List<OffreDTO> getAllOffres();
+    Optional<OffreDTO> getOffreById(Long id);
+}
