@@ -16,7 +16,6 @@ public class Offre {
     private LocalDate dateCreation;
     private LocalDate dateExpiration;
     private String description;
-    private boolean status;
 
     @ManyToMany(mappedBy = "offres")
     private Set<Client> clients;
