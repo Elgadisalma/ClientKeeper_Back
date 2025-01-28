@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -26,13 +27,9 @@ public class Client extends Utilisateur {
     private String securePin;
     private int status;
 
-    @ManyToMany
-    @JoinTable(
-            name = "client_offre",
-            joinColumns = @JoinColumn(name = "client_id"),
-            inverseJoinColumns = @JoinColumn(name = "offre_id")
-    )
-    private Set<Offre> offres;
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ClientOffre> clientOffres = new HashSet<>();
+
 
     public Client() {
     }
