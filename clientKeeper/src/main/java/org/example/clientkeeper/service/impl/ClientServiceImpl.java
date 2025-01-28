@@ -1,13 +1,22 @@
 package org.example.clientkeeper.service.impl;
 
 import org.example.clientkeeper.dto.ClientDTO;
+import org.example.clientkeeper.dto.ClientOffreDTO;
 import org.example.clientkeeper.exception.CustomValidationException;
 import org.example.clientkeeper.mapper.ClientMapper;
+import org.example.clientkeeper.mapper.ClientOffreMapper;
 import org.example.clientkeeper.model.Client;
+import org.example.clientkeeper.model.ClientOffre;
+import org.example.clientkeeper.model.ClientOffreId;
+import org.example.clientkeeper.model.Offre;
+import org.example.clientkeeper.repository.ClientOffreRepository;
 import org.example.clientkeeper.repository.ClientRepository;
+import org.example.clientkeeper.repository.OffreRepository;
 import org.example.clientkeeper.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -17,6 +26,17 @@ public class ClientServiceImpl implements ClientService {
 
     @Autowired
     ClientRepository clientRepository;
+
+    @Autowired
+    OffreRepository offreRepository;
+
+    @Autowired
+    ClientOffreMapper clientOffreMapper;
+
+    @Autowired
+    ClientOffreRepository clientOffreRepository;
+
+
 
     @Override
     public ClientDTO getClientById(Long id) {
@@ -37,4 +57,32 @@ public class ClientServiceImpl implements ClientService {
         client.setStatus(1);
         clientRepository.save(client);
     }
+
+    @Override
+    public void associateClientWithOffre(ClientOffreDTO clientOffreDTO) {
+        Client client = clientRepository.findById(clientOffreDTO.getClientId())
+                .orElseThrow(() -> new IllegalArgumentException("Client not found"));
+
+        Offre offre = offreRepository.findById(clientOffreDTO.getOffreId())
+                .orElseThrow(() -> new IllegalArgumentException("Offre not found with ID"));
+
+        ClientOffreId clientOffreId = new ClientOffreId();
+        clientOffreId.setClientId(clientOffreDTO.getClientId());
+        clientOffreId.setOffreId(clientOffreDTO.getOffreId());
+
+        ClientOffre clientOffre = clientOffreRepository.findById(clientOffreId).orElse(null);
+
+        if (clientOffre != null) {
+            clientOffre.setDateAffectation(LocalDate.now());
+        } else {
+            clientOffre = new ClientOffre();
+            clientOffre.setId(clientOffreId);
+            clientOffre.setClient(client);
+            clientOffre.setOffre(offre);
+            clientOffre.setDateAffectation(LocalDate.now());
+        }
+
+        clientOffreRepository.save(clientOffre);
+    }
+
 }
