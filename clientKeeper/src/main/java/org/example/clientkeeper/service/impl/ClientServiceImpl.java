@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -83,6 +84,12 @@ public class ClientServiceImpl implements ClientService {
         }
 
         clientOffreRepository.save(clientOffre);
+    }
+
+    @Override
+    public List<ClientDTO> getNoAppClients() { // Changer ClientDTO -> List<ClientDTO>
+        List<Client> clients = clientRepository.findByStatus(1);
+        return clientMapper.toDTO(clients);
     }
 
 }

@@ -45,9 +45,9 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/register", "/api/auth/login", "/api/auth/forgot-password").permitAll()
+                        .requestMatchers("/api/auth/login", "/api/auth/register","/api/auth/forgot-password").permitAll()
                         .requestMatchers("/api/transactions/**").hasRole("CLIENT")
-                        .requestMatchers("/api/churn/predict", "/api/offres/**", "/api/clients/approveClient/", "/api/clients/associate").hasRole("ADMIN")
+                        .requestMatchers("/api/churn/predict", "/api/offres/**", "/api/clients/approveClient/", "/api/clients/associate", "/api/clients/noAppr").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

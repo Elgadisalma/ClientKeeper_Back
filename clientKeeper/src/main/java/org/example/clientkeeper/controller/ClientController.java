@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/clients")
 public class ClientController {
@@ -18,6 +20,12 @@ public class ClientController {
     public ResponseEntity<ClientDTO> getClientById(@PathVariable Long id) {
         ClientDTO client = clientService.getClientById(id);
         return ResponseEntity.ok(client);
+    }
+
+    @GetMapping("/noAppr")
+    public ResponseEntity<List<ClientDTO>> getNoAppClients() {
+        List<ClientDTO> clients = clientService.getNoAppClients();
+        return ResponseEntity.ok(clients);
     }
 
     @PostMapping("/associate")
