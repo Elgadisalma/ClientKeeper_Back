@@ -13,6 +13,7 @@ import org.example.clientkeeper.repository.ClientOffreRepository;
 import org.example.clientkeeper.repository.ClientRepository;
 import org.example.clientkeeper.repository.OffreRepository;
 import org.example.clientkeeper.service.ClientService;
+import org.example.clientkeeper.service.EmailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,8 @@ public class ClientServiceImpl implements ClientService {
     @Autowired
     ClientOffreRepository clientOffreRepository;
 
+    @Autowired
+    private EmailSenderService emailService;
 
 
     @Override
@@ -47,17 +50,29 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void approveClient(Long clientId) {
+    public void approveClient(Long clientId, String newNumeroCompte) {
         Client client = clientRepository.findById(clientId)
                 .orElseThrow(() -> new CustomValidationException("Client non trouvé"));
 
-        if (client.getStatus() == 1) {
+        if (client.getStatus() == 0) {
             throw new CustomValidationException("Client déjà approuvé");
         }
 
-        client.setStatus(1);
+        client.setStatus(0);
+        client.setNumeroCompte(newNumeroCompte);
         clientRepository.save(client);
+
+        // Envoyer un email de confirmation
+        String subject = "Félicitations ! Vous êtes approuvé";
+        String message = "Cher " + client.getNom() + ",\n\n" +
+                "Félicitations ! Vous êtes maintenant approuvé en tant que client de ClientKeeper.\n" +
+                "Voici votre nouveau numéro de compte : " + newNumeroCompte + "\n\n" +
+                "Merci de faire confiance à notre banque.\n\n" +
+                "Cordialement,\nL'équipe ClientKeeper.";
+
+        emailService.sendVerificationEmail(client.getEmail(), subject, message);
     }
+
 
     @Override
     public void associateClientWithOffre(ClientOffreDTO clientOffreDTO) {

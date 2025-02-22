@@ -2,6 +2,7 @@ package org.example.clientkeeper.controller;
 
 import org.example.clientkeeper.dto.ClientDTO;
 import org.example.clientkeeper.dto.ClientOffreDTO;
+import org.example.clientkeeper.dto.request.ApproveClientRequest;
 import org.example.clientkeeper.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,9 +39,10 @@ public class ClientController {
         }
     }
 
-    @PutMapping("/approveClient/{clientId}")
-    public ResponseEntity<String> approveClient(@PathVariable Long clientId) {
-        clientService.approveClient(clientId);
-        return ResponseEntity.ok("Client approuvé avec succès");
+    @PutMapping("/approveClient")
+    public ResponseEntity<String> approveClient(@RequestBody ApproveClientRequest request) {
+        clientService.approveClient(request.getClientId(), request.getNewNumeroCompte());
+        return ResponseEntity.ok("Client approuvé avec succès, email envoyé !");
     }
+
 }
