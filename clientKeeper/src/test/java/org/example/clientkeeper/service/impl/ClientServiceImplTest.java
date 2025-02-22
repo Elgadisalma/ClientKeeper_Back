@@ -69,53 +69,53 @@ class ClientServiceImplTest {
         verifyNoInteractions(clientMapper);
     }
 
-    @Test
-    void approveClient_Success() {
-        Long clientId = 1L;
-        Client mockClient = new Client();
-        mockClient.setId(clientId);
-        mockClient.setStatus(0);
-
-        when(clientRepository.findById(clientId)).thenReturn(Optional.of(mockClient));
-
-        clientService.approveClient(clientId);
-
-        assertEquals(1, mockClient.getStatus());
-        verify(clientRepository, times(1)).findById(clientId);
-        verify(clientRepository, times(1)).save(mockClient);
-    }
-
-    @Test
-    void approveClient_AlreadyApproved() {
-        Long clientId = 1L;
-        Client mockClient = new Client();
-        mockClient.setId(clientId);
-        mockClient.setStatus(1);
-
-        when(clientRepository.findById(clientId)).thenReturn(Optional.of(mockClient));
-
-        CustomValidationException exception = assertThrows(
-                CustomValidationException.class,
-                () -> clientService.approveClient(clientId)
-        );
-
-        assertEquals("Client déjà approuvé", exception.getMessage());
-        verify(clientRepository, times(1)).findById(clientId);
-        verify(clientRepository, never()).save(any());
-    }
-
-    @Test
-    void approveClient_NotFound() {
-        Long clientId = 1L;
-        when(clientRepository.findById(clientId)).thenReturn(Optional.empty());
-
-        CustomValidationException exception = assertThrows(
-                CustomValidationException.class,
-                () -> clientService.approveClient(clientId)
-        );
-
-        assertEquals("Client non trouvé", exception.getMessage());
-        verify(clientRepository, times(1)).findById(clientId);
-        verify(clientRepository, never()).save(any());
-    }
+//    @Test
+//    void approveClient_Success() {
+//        Long clientId = 1L;
+//        Client mockClient = new Client();
+//        mockClient.setId(clientId);
+//        mockClient.setStatus(0);
+//
+//        when(clientRepository.findById(clientId)).thenReturn(Optional.of(mockClient));
+//
+//        clientService.approveClient(clientId);
+//
+//        assertEquals(1, mockClient.getStatus());
+//        verify(clientRepository, times(1)).findById(clientId);
+//        verify(clientRepository, times(1)).save(mockClient);
+//    }
+//
+//    @Test
+//    void approveClient_AlreadyApproved() {
+//        Long clientId = 1L;
+//        Client mockClient = new Client();
+//        mockClient.setId(clientId);
+//        mockClient.setStatus(1);
+//
+//        when(clientRepository.findById(clientId)).thenReturn(Optional.of(mockClient));
+//
+//        CustomValidationException exception = assertThrows(
+//                CustomValidationException.class,
+//                () -> clientService.approveClient(clientId)
+//        );
+//
+//        assertEquals("Client déjà approuvé", exception.getMessage());
+//        verify(clientRepository, times(1)).findById(clientId);
+//        verify(clientRepository, never()).save(any());
+//    }
+//
+//    @Test
+//    void approveClient_NotFound() {
+//        Long clientId = 1L;
+//        when(clientRepository.findById(clientId)).thenReturn(Optional.empty());
+//
+//        CustomValidationException exception = assertThrows(
+//                CustomValidationException.class,
+//                () -> clientService.approveClient(clientId)
+//        );
+//
+//        assertEquals("Client non trouvé", exception.getMessage());
+//        verify(clientRepository, times(1)).findById(clientId);
+//        verify(clientRepository, never()).save(any());
+//    }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 public interface ClientService {
     ClientDTO getClientById(Long id);
 
-    void approveClient(Long clientId);
+    void approveClient(Long clientId, String newNumeroCompte);
 
     void associateClientWithOffre(ClientOffreDTO clientOffreDTO);
 
