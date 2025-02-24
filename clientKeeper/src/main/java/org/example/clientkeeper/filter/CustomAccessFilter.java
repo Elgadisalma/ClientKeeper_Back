@@ -21,9 +21,11 @@ import java.util.Optional;
 public class CustomAccessFilter extends OncePerRequestFilter {
 
     private final ClientRepository clientRepository;
+    private final ObjectMapper objectMapper;
 
-    public CustomAccessFilter(ClientRepository clientRepository) {
+    public CustomAccessFilter(ClientRepository clientRepository, ObjectMapper objectMapper) {
         this.clientRepository = clientRepository;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -37,12 +39,12 @@ public class CustomAccessFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+        CachedBodyHttpServletRequest cachedBodyHttpServletRequest = new CachedBodyHttpServletRequest(request);
         String path = request.getServletPath();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // Traitement spécial pour /api/auth/login
         if (path.equals("/api/auth/login")) {
-            String email = extractEmailFromLoginRequest(request);
+            String email = extractEmailFromLoginRequest(cachedBodyHttpServletRequest);
 
             if (email != null) {
                 Optional<Client> clientOpt = clientRepository.findByEmail(email);
@@ -50,31 +52,31 @@ public class CustomAccessFilter extends OncePerRequestFilter {
                     Client client = clientOpt.get();
                     if (client.getStatus() != 0 && !client.getRole().equals("ROLE_ADMIN")) {
                         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                        response.getWriter().write("Accès refusé : Seuls les clients approuvés et les administrateurs peuvent se connecter.");
+                        response.getWriter().write("Seuls les clients approuves et les administrateurs peuvent se connecter.");
                         return;
                     }
                 }
             }
-        }
-        else if (authentication != null && authentication.isAuthenticated()) {
-            String email = authentication.getName();
-            Optional<Client> clientOpt = clientRepository.findByEmail(email);
+            filterChain.doFilter(cachedBodyHttpServletRequest, response);
+        } else {
+            if (authentication != null && authentication.isAuthenticated()) {
+                String email = authentication.getName();
+                Optional<Client> clientOpt = clientRepository.findByEmail(email);
 
-            if (clientOpt.isPresent()) {
-                Client client = clientOpt.get();
-                if (client.getStatus() != 0 && !client.getRole().equals("ROLE_ADMIN")) {
-                    throw new AccessDeniedException("Seuls les clients approuves et les administrateurs peuvent se connecter.");
+                if (clientOpt.isPresent()) {
+                    Client client = clientOpt.get();
+                    if (client.getStatus() != 0 && !client.getRole().equals("ROLE_ADMIN")) {
+                        throw new AccessDeniedException("Seuls les clients approuves et les administrateurs peuvent se connecter.");
+                    }
                 }
             }
+            filterChain.doFilter(request, response);
         }
-
-        filterChain.doFilter(request, response);
     }
 
     private String extractEmailFromLoginRequest(HttpServletRequest request) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            Map<String, String> requestBody = mapper.readValue(request.getInputStream(), Map.class);
+            Map<String, String> requestBody = objectMapper.readValue(request.getInputStream(), Map.class);
             return requestBody.get("email");
         } catch (IOException e) {
             return null;
