@@ -41,8 +41,15 @@ public class ClientController {
 
     @PutMapping("/approveClient")
     public ResponseEntity<String> approveClient(@RequestBody ApproveClientRequest request) {
-        clientService.approveClient(request.getClientId(), request.getNewNumeroCompte());
+        clientService.approveClient(request.getUserId(), request.getNumeroCompte());
         return ResponseEntity.ok("Client approuvé avec succès, email envoyé !");
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteClient(@PathVariable Long id) {
+        clientService.deleteClient(id);
+        return ResponseEntity.ok("Client supprimé avec succès");
+    }
+
 
 }

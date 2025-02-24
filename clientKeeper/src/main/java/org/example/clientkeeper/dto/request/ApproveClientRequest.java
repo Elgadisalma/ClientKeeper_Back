@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ApproveClientRequest {
-    private Long clientId;
-    private String newNumeroCompte;
+    private Long userId;
+    private String numeroCompte;
 }

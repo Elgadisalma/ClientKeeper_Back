@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClientDTO {
+    private Long id;
     private String nom;
     private String prenom;
     private String cin;
