@@ -62,7 +62,6 @@ public class ClientServiceImpl implements ClientService {
         client.setNumeroCompte(newNumeroCompte);
         clientRepository.save(client);
 
-        // Envoyer un email de confirmation
         String subject = "Félicitations ! Vous êtes approuvé";
         String message = "Cher " + client.getNom() + ",\n\n" +
                 "Félicitations ! Vous êtes maintenant approuvé en tant que client de ClientKeeper.\n" +
@@ -102,9 +101,22 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<ClientDTO> getNoAppClients() { // Changer ClientDTO -> List<ClientDTO>
+    public List<ClientDTO> getNoAppClients() {
         List<Client> clients = clientRepository.findByStatus(1);
         return clientMapper.toDTO(clients);
+    }
+
+
+    @Override
+    public void deleteClient(Long clientId) {
+        Client client = clientRepository.findById(clientId)
+                .orElseThrow(() -> new CustomValidationException("Client non trouvé avec l'ID : " + clientId));
+
+        if (client.getStatus() != 1) {
+            throw new CustomValidationException("Impossible de supprimer un client déjà approuvé !");
+        }
+
+        clientRepository.delete(client);
     }
 
 }

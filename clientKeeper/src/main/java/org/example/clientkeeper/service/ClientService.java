@@ -13,4 +13,6 @@ public interface ClientService {
     void associateClientWithOffre(ClientOffreDTO clientOffreDTO);
 
     List<ClientDTO> getNoAppClients();
+
+    void deleteClient(Long id);
 }

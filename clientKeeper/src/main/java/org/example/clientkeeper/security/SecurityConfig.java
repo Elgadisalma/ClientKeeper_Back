@@ -3,6 +3,7 @@ package org.example.clientkeeper.security;
 import lombok.AllArgsConstructor;
 import org.example.clientkeeper.exception.CustomAccessDeniedHandler;
 import org.example.clientkeeper.exception.CustomAuthenticationEntryPoint;
+import org.example.clientkeeper.filter.CustomAccessFilter;
 import org.example.clientkeeper.filter.JwtAuthenticationFilter;
 import org.example.clientkeeper.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
@@ -34,6 +35,9 @@ public class SecurityConfig {
     private CustomAccessDeniedHandler customAccessDeniedHandler;
     private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private CustomUserDetailsService customUserDetailsService;
+    private final CustomAccessFilter customAccessFilter;
+
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -57,7 +61,10 @@ public class SecurityConfig {
                         .accessDeniedHandler(customAccessDeniedHandler)
                         .authenticationEntryPoint(customAuthenticationEntryPoint)
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+                .addFilterBefore(customAccessFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter, CustomAccessFilter.class);
+
 
         return http.build();
     }
