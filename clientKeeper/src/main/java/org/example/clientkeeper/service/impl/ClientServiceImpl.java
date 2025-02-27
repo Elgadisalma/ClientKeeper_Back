@@ -5,13 +5,11 @@ import org.example.clientkeeper.dto.ClientOffreDTO;
 import org.example.clientkeeper.exception.CustomValidationException;
 import org.example.clientkeeper.mapper.ClientMapper;
 import org.example.clientkeeper.mapper.ClientOffreMapper;
-import org.example.clientkeeper.model.Client;
-import org.example.clientkeeper.model.ClientOffre;
-import org.example.clientkeeper.model.ClientOffreId;
-import org.example.clientkeeper.model.Offre;
+import org.example.clientkeeper.model.*;
 import org.example.clientkeeper.repository.ClientOffreRepository;
 import org.example.clientkeeper.repository.ClientRepository;
 import org.example.clientkeeper.repository.OffreRepository;
+import org.example.clientkeeper.repository.UtilisateurRepository;
 import org.example.clientkeeper.service.ClientService;
 import org.example.clientkeeper.service.EmailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +26,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Autowired
     ClientRepository clientRepository;
+
+    @Autowired
+    UtilisateurRepository utilisateurRepository;
 
     @Autowired
     OffreRepository offreRepository;
@@ -116,7 +117,21 @@ public class ClientServiceImpl implements ClientService {
             throw new CustomValidationException("Impossible de supprimer un client déjà approuvé !");
         }
 
+        Utilisateur utilisateur = utilisateurRepository.findById(clientId)
+                .orElseThrow(() -> new CustomValidationException("Utilisateur non trouvé avec l'ID : " + clientId));
+
         clientRepository.delete(client);
+
+        utilisateurRepository.delete(utilisateur);
     }
+
+
+    public boolean hasActiveStatus(String email) {
+        return clientRepository.findByEmail(email)
+                .map(client -> client.getStatus() == 0)
+                .orElse(false);
+    }
+
+
 
 }

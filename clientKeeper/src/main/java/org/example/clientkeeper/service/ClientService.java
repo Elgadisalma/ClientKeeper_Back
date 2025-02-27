@@ -15,4 +15,5 @@ public interface ClientService {
     List<ClientDTO> getNoAppClients();
 
     void deleteClient(Long id);
+
 }

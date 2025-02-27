@@ -5,6 +5,7 @@ import org.example.clientkeeper.dto.TransactionDTO;
 import org.example.clientkeeper.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ public class TransactionController {
     @Autowired
     TransactionService transactionService;
 
+    @PreAuthorize("hasRole('CLIENT') and @clientServiceImpl.hasActiveStatus(authentication.name)")
     @PostMapping("/transfer")
     public ResponseEntity<String> transferMoney(@RequestBody TransactionDTO transactionRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

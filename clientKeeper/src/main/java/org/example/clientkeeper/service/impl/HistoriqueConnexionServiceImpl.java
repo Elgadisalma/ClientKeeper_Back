@@ -17,9 +17,15 @@ public class HistoriqueConnexionServiceImpl implements HistoriqueConnexionServic
 
     @Override
     public void enregistrerConnexion(Client client) {
+        if (client.getStatus() != 0) {
+            System.out.println("Connexion ignoree");
+            return;
+        }
+
         HistoriqueConnexion historique = new HistoriqueConnexion();
         historique.setClient(client);
         historique.setDateConnexion(LocalDateTime.now());
         historiqueConnexionRepository.save(historique);
     }
+
 }

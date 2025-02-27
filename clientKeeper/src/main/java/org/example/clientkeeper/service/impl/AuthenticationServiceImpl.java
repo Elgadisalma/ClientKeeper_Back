@@ -65,7 +65,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .phoneNumber(request.getPhoneNumber())
                 .numeroCompte("F1")
                 .securePin(request.getSecurePin())
-                .status(0)
+                .status(1)
                 .solde(0.0)
                 .build();
 

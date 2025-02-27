@@ -3,7 +3,6 @@ package org.example.clientkeeper.security;
 import lombok.AllArgsConstructor;
 import org.example.clientkeeper.exception.CustomAccessDeniedHandler;
 import org.example.clientkeeper.exception.CustomAuthenticationEntryPoint;
-import org.example.clientkeeper.filter.CustomAccessFilter;
 import org.example.clientkeeper.filter.JwtAuthenticationFilter;
 import org.example.clientkeeper.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +26,7 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig {
 
     private JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -35,9 +34,6 @@ public class SecurityConfig {
     private CustomAccessDeniedHandler customAccessDeniedHandler;
     private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private CustomUserDetailsService customUserDetailsService;
-    private final CustomAccessFilter customAccessFilter;
-
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -51,7 +47,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/login", "/api/auth/register","/api/auth/forgot-password").permitAll()
                         .requestMatchers("/api/transactions/**").hasRole("CLIENT")
-                        .requestMatchers("/api/churn/predict", "/api/offres/**", "/api/clients/approveClient/", "/api/clients/associate", "/api/clients/noAppr").hasRole("ADMIN")
+                        .requestMatchers("/api/churn/predict", "/api/offres/**", "/api/clients/approveClient/", "/api/clients/associate", "/api/clients/noAppr", "/api/clients/delete/").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
@@ -61,10 +57,7 @@ public class SecurityConfig {
                         .accessDeniedHandler(customAccessDeniedHandler)
                         .authenticationEntryPoint(customAuthenticationEntryPoint)
                 )
-
-                .addFilterBefore(customAccessFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtAuthenticationFilter, CustomAccessFilter.class);
-
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
