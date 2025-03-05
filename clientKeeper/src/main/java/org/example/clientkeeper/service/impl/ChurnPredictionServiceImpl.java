@@ -10,10 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ChurnPredictionServiceImpl implements ChurnPredictionService {
@@ -62,10 +59,36 @@ public class ChurnPredictionServiceImpl implements ChurnPredictionService {
     public List<Map<String, Object>> predictChurn(List<Map<String, Object>> clientData) {
         String flaskUrl = "http://localhost:5000/predict";
 
+        // Création du corps de la requête pour Flask
         Map<String, Object> requestBody = Map.of("users", clientData);
 
+        // Envoi de la requête et récupération des prédictions
         List<Map<String, Object>> predictions = restTemplate.postForObject(flaskUrl, requestBody, List.class);
 
-        return predictions;
+        // Liste finale avec les informations complètes
+        List<Map<String, Object>> enrichedPredictions = new ArrayList<>();
+
+        for (Map<String, Object> prediction : predictions) {
+            Number idNumber = (Number) prediction.get("id");
+            Long clientId = idNumber.longValue();
+
+            Optional<Client> clientOpt = clientRepository.findById(clientId);
+
+            if (clientOpt.isPresent()) {
+                Client client = clientOpt.get();
+
+                Map<String, Object> enrichedData = new HashMap<>(prediction);
+                enrichedData.put("nom", client.getNom());
+                enrichedData.put("prenom", client.getPrenom());
+                enrichedData.put("numeroCompte", client.getNumeroCompte());
+                enrichedData.put("cin", client.getCin());
+
+                enrichedPredictions.add(enrichedData);
+            }
+        }
+
+
+        return enrichedPredictions;
     }
+
 }

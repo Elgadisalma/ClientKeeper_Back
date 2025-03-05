@@ -39,4 +39,12 @@ public class OffreController {
         Optional<OffreDTO> offreDTO = offreService.getOffreById(id);
         return offreDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<OffreDTO> updateOffre(@PathVariable Long id, @RequestBody OffreDTO offreDTO) {
+        Optional<OffreDTO> updatedOffre = offreService.updateOffre(id, offreDTO);
+
+        return updatedOffre.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
 }
