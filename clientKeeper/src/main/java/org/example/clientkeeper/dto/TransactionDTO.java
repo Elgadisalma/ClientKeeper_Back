@@ -13,4 +13,5 @@ public class TransactionDTO {
     private double montant;
     private String motif;
     private String securePin;
+    private String typeTransaction;
 }

@@ -51,5 +51,9 @@ public class ClientController {
         return ResponseEntity.ok("Client supprimé avec succès");
     }
 
-
+    @GetMapping("/get/{email}")
+    public ResponseEntity<?> getClientByEmail(@PathVariable String email) {
+        ClientDTO client = clientService.getClientByEmail(email);
+        return ResponseEntity.ok(client);
+    }
 }
