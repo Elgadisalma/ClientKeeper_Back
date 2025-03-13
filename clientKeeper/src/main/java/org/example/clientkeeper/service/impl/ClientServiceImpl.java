@@ -13,6 +13,9 @@ import org.example.clientkeeper.repository.UtilisateurRepository;
 import org.example.clientkeeper.service.ClientService;
 import org.example.clientkeeper.service.EmailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -123,6 +126,19 @@ public class ClientServiceImpl implements ClientService {
         clientRepository.delete(client);
 
         utilisateurRepository.delete(utilisateur);
+    }
+
+    @Override
+    public ClientDTO getClientByEmail(String email) {
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Utilisateur non trouvé"));
+
+        if (utilisateur instanceof Client) {
+            Client client = (Client) utilisateur;
+            return clientMapper.toDTO(client);
+        }
+
+        throw new CustomValidationException("L'utilisateur n'est pas un client.");
     }
 
 

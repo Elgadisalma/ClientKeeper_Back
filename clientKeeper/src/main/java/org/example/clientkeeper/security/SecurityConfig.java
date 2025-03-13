@@ -46,7 +46,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/login", "/api/auth/register","/api/auth/forgot-password").permitAll()
-                        .requestMatchers("/api/transactions/**").hasRole("CLIENT")
+                        .requestMatchers("/api/transactions/**" , "/api/clients/get/").hasRole("CLIENT")
                         .requestMatchers("/api/churn/predict", "/api/offres/**", "/api/clients/approveClient/", "/api/clients/associate", "/api/clients/noAppr", "/api/clients/delete/").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

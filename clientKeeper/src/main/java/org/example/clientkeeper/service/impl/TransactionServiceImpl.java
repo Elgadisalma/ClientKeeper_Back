@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -82,14 +83,36 @@ public class TransactionServiceImpl implements TransactionService {
         Utilisateur utilisateur = utilisateurRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new CustomValidationException("Utilisateur non trouvé."));
 
-        Client sender = clientRepository.findById(utilisateur.getId())
+        Client client = clientRepository.findById(utilisateur.getId())
                 .orElseThrow(() -> new CustomValidationException("Client introuvable."));
 
-        List<Transaction> transactions = transactionRepository.findBySender(sender);
+        // Transactions émises
+        List<TransactionDTO> sentTransactions = transactionRepository.findBySender(client).stream()
+                .map(transaction -> {
+                    TransactionDTO dto = transactionMapper.toDTO(transaction);
+                    dto.setTypeTransaction("emise");
+                    return dto;
+                })
+                .toList();
 
-        return transactions.stream()
-                .map(transactionMapper::toDTO)
+        // Transactions reçues
+        List<TransactionDTO> receivedTransactions = transactionRepository.findByReceiver(client).stream()
+                .map(transaction -> {
+                    TransactionDTO dto = transactionMapper.toDTO(transaction);
+                    dto.setTypeTransaction("recue");
+                    return dto;
+                })
+                .toList();
+
+        // Fusion des transactions
+        List<TransactionDTO> allTransactions = new ArrayList<>();
+        allTransactions.addAll(sentTransactions);
+        allTransactions.addAll(receivedTransactions);
+
+        // Regroupement par date
+        return allTransactions.stream()
                 .collect(Collectors.groupingBy(dto -> dto.getDateTransaction().toLocalDate()));
     }
+
 
 }
