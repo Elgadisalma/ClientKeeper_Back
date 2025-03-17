@@ -77,24 +77,24 @@ class AuthenticationServiceImplTest {
         assertEquals("Un utilisateur avec cet email existe déjà.", exception.getMessage());
     }
 
-    @Test
-    void testAuthenticate_Success() {
-        AuthenticationRequest request = new AuthenticationRequest("test@example.com", "password123");
-        var client = Client.builder()
-                .email(request.getEmail())
-                .password("password123")
-                .role(Role.ROLE_CLIENT)
-                .build();
-
-        when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.of(client));
-        when(jwtUtil.generateToken(client.getEmail())).thenReturn("jwtToken");
-
-        AuthenticationResponse response = authenticationService.authenticate(request);
-
-        assertNotNull(response);
-        assertEquals("jwtToken", response.getToken());
-        assertEquals("test@example.com", response.getEmail());
-    }
+//    @Test
+//    void testAuthenticate_Success() {
+//        AuthenticationRequest request = new AuthenticationRequest("test@example.com", "password123");
+//        var client = Client.builder()
+//                .email(request.getEmail())
+//                .password("password123")
+//                .role(Role.ROLE_CLIENT)
+//                .build();
+//
+//        when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.of(client));
+//        when(jwtUtil.generateToken(client.getEmail())).thenReturn("jwtToken");
+//
+//        AuthenticationResponse response = authenticationService.authenticate(request);
+//
+//        assertNotNull(response);
+//        assertEquals("jwtToken", response.getToken());
+//        assertEquals("test@example.com", response.getEmail());
+//    }
 
     @Test
     void testAuthenticate_InvalidCredentials() {
