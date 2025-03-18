@@ -102,7 +102,22 @@ public class ClientServiceImpl implements ClientService {
         }
 
         clientOffreRepository.save(clientOffre);
+
+        double taux = offre.getTaux();
+        String clientEmail = client.getEmail();
+        String subject = "Nouvelle Offre Associée";
+        String message = String.format("Bonjour %s,\n\n" +
+                        "Vous avez été associé à l'offre suivante le : %s.\n\n" +
+                        "Elle sera expirée le : %s.\n\n" +
+                        "Le pourcentage d'affectation est de : %.2f%%.\n\n" +
+                        "Merci de votre confiance.\n\n" +
+                        "Cordialement,\nL'équipe ClientKeeper.",
+                client.getNom(), offre.getDateExpiration(), offre.getDateExpiration(), taux);
+
+        emailService.sendVerificationEmail(clientEmail, subject, message);
     }
+
+
 
     @Override
     public List<ClientDTO> getNoAppClients() {
