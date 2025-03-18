@@ -2,9 +2,12 @@ package org.example.clientkeeper.controller;
 
 import org.example.clientkeeper.dto.ClientDTO;
 import org.example.clientkeeper.dto.ClientOffreDTO;
+import org.example.clientkeeper.dto.TransactionDetailsDTO;
 import org.example.clientkeeper.dto.request.ApproveClientRequest;
 import org.example.clientkeeper.service.ClientService;
+import org.example.clientkeeper.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +19,9 @@ public class ClientController {
 
     @Autowired
     private ClientService clientService;
+
+    @Autowired
+    private TransactionService transactionService;
 
     @GetMapping("/{id}")
     public ResponseEntity<ClientDTO> getClientById(@PathVariable Long id) {
@@ -50,6 +56,13 @@ public class ClientController {
         clientService.deleteClient(id);
         return ResponseEntity.ok("Client supprimé avec succès");
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<TransactionDetailsDTO>> getAllTransactions() {
+        List<TransactionDetailsDTO> transactions = transactionService.getAllTransactions();
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
+    }
+
 
     @GetMapping("/get/{email}")
     public ResponseEntity<?> getClientByEmail(@PathVariable String email) {

@@ -2,8 +2,10 @@ package org.example.clientkeeper.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.clientkeeper.dto.TransactionDTO;
+import org.example.clientkeeper.dto.TransactionDetailsDTO;
 import org.example.clientkeeper.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -39,5 +41,6 @@ public class TransactionController {
         Map<LocalDate, List<TransactionDTO>> groupedHistory = transactionService.getUserTransactionHistory(userEmail);
         return ResponseEntity.ok(groupedHistory);
     }
+
 
 }

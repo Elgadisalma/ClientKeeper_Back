@@ -2,6 +2,7 @@ package org.example.clientkeeper.service.impl;
 
 import jakarta.transaction.Transactional;
 import org.example.clientkeeper.dto.TransactionDTO;
+import org.example.clientkeeper.dto.TransactionDetailsDTO;
 import org.example.clientkeeper.exception.CustomValidationException;
 import org.example.clientkeeper.mapper.TransactionMapper;
 import org.example.clientkeeper.model.Client;
@@ -114,5 +115,31 @@ public class TransactionServiceImpl implements TransactionService {
                 .collect(Collectors.groupingBy(dto -> dto.getDateTransaction().toLocalDate()));
     }
 
+    @Override
+    public List<TransactionDetailsDTO> getAllTransactions() {
+        List<Transaction> transactions = transactionRepository.findAll();
+
+        List<TransactionDetailsDTO> transactionDetailsDTOs = transactions.stream()
+                .map(transaction -> {
+                    TransactionDetailsDTO dto = new TransactionDetailsDTO();
+
+                    dto.setSenderAccountNumber(transaction.getSender().getNumeroCompte());
+                    dto.setSenderName(transaction.getSender().getNom());
+                    dto.setSenderPrenom(transaction.getSender().getPrenom());
+
+                    dto.setReceiverAccountNumber(transaction.getReceiver().getNumeroCompte());
+                    dto.setReceiverName(transaction.getReceiver().getNom());
+                    dto.setReceiverPrenom(transaction.getReceiver().getPrenom());
+
+                    dto.setMontant(transaction.getMontant());
+                    dto.setDateTransaction(transaction.getDateTransaction());
+                    dto.setMotif(transaction.getMotif());
+
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        return transactionDetailsDTOs;
+    }
 
 }

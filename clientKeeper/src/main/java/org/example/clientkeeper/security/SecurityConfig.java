@@ -47,7 +47,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/login", "/api/auth/register","/api/auth/forgot-password").permitAll()
                         .requestMatchers("/api/transactions/**" , "/api/clients/get/").hasRole("CLIENT")
-                        .requestMatchers("/api/churn/predict", "/api/offres/**", "/api/clients/approveClient/", "/api/clients/associate", "/api/clients/noAppr", "/api/clients/delete/").hasRole("ADMIN")
+                        .requestMatchers("/api/churn/predict", "/api/offres/**", "/api/clients/approveClient/", "/api/clients/associate", "/api/clients/noAppr", "/api/clients/delete/", "/api/transactions/all/").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
