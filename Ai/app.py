@@ -2,20 +2,10 @@ from flask import Flask, request, jsonify
 import tensorflow as tf
 import numpy as np
 import joblib
-import os
 
 app = Flask(__name__)
 
-if os.path.isdir("churn_model"):
-    print("Chargement du modèle au format SavedModel...")
-    model = tf.keras.models.load_model("churn_model")
-elif os.path.isfile("churn_model.h5"):
-    print("Chargement du modèle au format H5...")
-    model = tf.keras.models.load_model("churn_model.h5")
-else:
-    raise FileNotFoundError("Aucun modèle trouvé. Veuillez créer le modèle avant de lancer l'application.")
-
-# Charge le scaler
+model = tf.keras.models.load_model("churn_model.h5")
 scaler = joblib.load("scaler.pkl")
 
 @app.route('/predict', methods=['POST'])

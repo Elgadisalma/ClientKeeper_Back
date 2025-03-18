@@ -57,7 +57,7 @@ public class ChurnPredictionServiceImpl implements ChurnPredictionService {
 
     @Override
     public List<Map<String, Object>> predictChurn(List<Map<String, Object>> clientData) {
-        String flaskUrl = "http://ai:5000/predict";
+        String flaskUrl = "http://localhost:5000/predict";
 
         // Création du corps de la requête pour Flask
         Map<String, Object> requestBody = Map.of("users", clientData);
