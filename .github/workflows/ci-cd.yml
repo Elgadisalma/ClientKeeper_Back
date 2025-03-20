@@ -19,18 +19,17 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v2
         with:
-          java-version: '17' 
-          
+          java-version: '17'  # Version de Java à utiliser
+          distribution: 'adoptopenjdk'  # Distribution Java (tu peux aussi utiliser 'openjdk' ou 'zulu')
+
       - name: Build and test backend
         run: |
-          cd clientKeeper  
-          ./mvnw clean install  
-
+          cd clientKeeper  # Se déplacer dans le dossier du backend
+          ./mvnw clean install  # Exécuter la commande Maven pour compiler et tester l'application
 
       - name: Deploy backend
         run: |
           echo "Déploiement du backend Java ici"
-
 
   # ai-python:
   #   runs-on: ubuntu-latest  # Choisir un environnement Linux
@@ -56,10 +55,4 @@ jobs:
   #     # Etape 4 : Tester le modèle AI
   #     - name: Test AI model
   #       run: |
-  #         cd Ai  # Se déplacer dans le dossier AI
-  #         python -m unittest discover  # Exécuter les tests de ton modèle AI (ajuste cette commande si nécessaire)
-
-  #     # Etape 5 : Déployer le modèle AI (ajuste selon ton mode de déploiement)
-  #     - name: Deploy AI model
-  #       run: |
-  #         echo "Déploiement du modèle AI ici"
+  #         cd Ai  # Se déplacer dans
