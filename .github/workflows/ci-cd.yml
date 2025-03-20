@@ -1,0 +1,65 @@
+name: CI/CD Workflow for Backend and AI
+
+on:
+  push:
+    branches:
+      - main  # Déclenche le workflow sur chaque push vers la branche principale
+  pull_request:
+    branches:
+      - main  # Déclenche le workflow sur chaque pull request vers la branche principale
+
+jobs:
+  backend-java:
+    runs-on: ubuntu-latest  # Choisir un environnement Linux
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17' 
+          
+      - name: Build and test backend
+        run: |
+          cd clientKeeper  
+          ./mvnw clean install  
+
+
+      - name: Deploy backend
+        run: |
+          echo "Déploiement du backend Java ici"
+
+
+  # ai-python:
+  #   runs-on: ubuntu-latest  # Choisir un environnement Linux
+  #   needs: backend-java  # Ce job dépend de celui du backend Java
+
+  #   steps:
+  #     # Etape 1 : Vérifier le code du dépôt
+  #     - name: Check out code
+  #       uses: actions/checkout@v2
+
+  #     # Etape 2 : Configurer Python
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v2
+  #       with:
+  #         python-version: '3.8'  # Assure-toi de spécifier la version de Python que tu utilises
+
+  #     # Etape 3 : Installer les dépendances Python de l'AI
+  #     - name: Install dependencies
+  #       run: |
+  #         cd Ai  # Se déplacer dans le dossier AI
+  #         pip install -r requirements.txt  # Installer les dépendances Python à partir de requirements.txt
+
+  #     # Etape 4 : Tester le modèle AI
+  #     - name: Test AI model
+  #       run: |
+  #         cd Ai  # Se déplacer dans le dossier AI
+  #         python -m unittest discover  # Exécuter les tests de ton modèle AI (ajuste cette commande si nécessaire)
+
+  #     # Etape 5 : Déployer le modèle AI (ajuste selon ton mode de déploiement)
+  #     - name: Deploy AI model
+  #       run: |
+  #         echo "Déploiement du modèle AI ici"
