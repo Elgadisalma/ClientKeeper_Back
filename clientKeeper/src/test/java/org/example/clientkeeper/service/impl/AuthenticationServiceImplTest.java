@@ -8,6 +8,7 @@ import org.example.clientkeeper.model.Client;
 import org.example.clientkeeper.model.Role;
 import org.example.clientkeeper.repository.ClientRepository;
 import org.example.clientkeeper.repository.UtilisateurRepository;
+import org.example.clientkeeper.service.HistoriqueConnexionService;
 import org.example.clientkeeper.util.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,9 @@ class AuthenticationServiceImplTest {
 
     @Mock
     private UtilisateurRepository userRepository;
+
+    @Mock
+    private HistoriqueConnexionService historiqueConnexionService;
 
     @Mock
     private ClientRepository clientRepository;
@@ -77,24 +81,36 @@ class AuthenticationServiceImplTest {
         assertEquals("Un utilisateur avec cet email existe déjà.", exception.getMessage());
     }
 
-//    @Test
-//    void testAuthenticate_Success() {
-//        AuthenticationRequest request = new AuthenticationRequest("test@example.com", "password123");
-//        var client = Client.builder()
-//                .email(request.getEmail())
-//                .password("password123")
-//                .role(Role.ROLE_CLIENT)
-//                .build();
-//
-//        when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.of(client));
-//        when(jwtUtil.generateToken(client.getEmail())).thenReturn("jwtToken");
-//
-//        AuthenticationResponse response = authenticationService.authenticate(request);
-//
-//        assertNotNull(response);
-//        assertEquals("jwtToken", response.getToken());
-//        assertEquals("test@example.com", response.getEmail());
-//    }
+    @Test
+    void testAuthenticate_Success() {
+        AuthenticationRequest request = new AuthenticationRequest("test@example.com", "password123");
+
+        var client = Client.builder()
+                .email(request.getEmail())
+                .password("password123")
+                .role(Role.ROLE_CLIENT)
+                .status(0)
+                .build();
+
+        when(authenticationManager.authenticate(any())).thenReturn(null);
+
+        when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.of(client));
+
+        when(jwtUtil.generateToken(client.getEmail())).thenReturn("jwtToken");
+
+        AuthenticationResponse response = authenticationService.authenticate(request);
+
+        assertNotNull(response);
+        assertEquals("jwtToken", response.getToken());
+        assertEquals("test@example.com", response.getEmail());
+        assertEquals("ROLE_CLIENT", response.getRole());
+        assertEquals(0, response.getStatus());
+
+        verify(authenticationManager, times(1)).authenticate(any());
+        verify(userRepository, times(1)).findByEmail(request.getEmail());
+        verify(jwtUtil, times(1)).generateToken(client.getEmail());
+    }
+
 
     @Test
     void testAuthenticate_InvalidCredentials() {
