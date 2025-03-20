@@ -11,45 +11,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      
-uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      
-name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: "17"
-        distribution: "temurin"
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: "17"
+          distribution: "temurin"
 
-      
-name: Build Backend
-      run: |
-        cd clientKeeper
-        mvn clean package -DskipTests
-
-
-  # ai-python:
-  #   runs-on: ubuntu-latest  # Choisir un environnement Linux
-  #   needs: backend-java  # Ce job dépend de celui du backend Java
-
-  #   steps:
-  #     # Etape 1 : Vérifier le code du dépôt
-  #     - name: Check out code
-  #       uses: actions/checkout@v2
-
-  #     # Etape 2 : Configurer Python
-  #     - name: Set up Python
-  #       uses: actions/setup-python@v2
-  #       with:
-  #         python-version: '3.8'  # Assure-toi de spécifier la version de Python que tu utilises
-
-  #     # Etape 3 : Installer les dépendances Python de l'AI
-  #     - name: Install dependencies
-  #       run: |
-  #         cd Ai  # Se déplacer dans le dossier AI
-  #         pip install -r requirements.txt  # Installer les dépendances Python à partir de requirements.txt
-
-  #     # Etape 4 : Tester le modèle AI
-  #     - name: Test AI model
-  #       run: |
-  #         cd Ai  # Se déplacer dans
+      - name: Build Backend
+        run: |
+          cd clientKeeper
+          mvn clean package -DskipTests
