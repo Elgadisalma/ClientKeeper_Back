@@ -36,11 +36,12 @@ public class TransactionController {
     }
 
     @GetMapping("/history")
-    public ResponseEntity<Map<LocalDate, List<TransactionDTO>>> getTransactionHistoryGrouped(Authentication authentication) {
+    public ResponseEntity<Map<LocalDate, List<TransactionDetailsDTO>>> getTransactionHistoryGrouped(Authentication authentication) {
         String userEmail = authentication.getName();
-        Map<LocalDate, List<TransactionDTO>> groupedHistory = transactionService.getUserTransactionHistory(userEmail);
+        Map<LocalDate, List<TransactionDetailsDTO>> groupedHistory = transactionService.getUserTransactionHistory(userEmail);
         return ResponseEntity.ok(groupedHistory);
     }
+
 
 
 }

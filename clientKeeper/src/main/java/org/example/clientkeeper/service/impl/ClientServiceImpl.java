@@ -54,22 +54,22 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void approveClient(Long clientId, String newNumeroCompte) {
+    public void approveClient(Long clientId, String NumeroCompte) {
         Client client = clientRepository.findById(clientId)
                 .orElseThrow(() -> new CustomValidationException("Client non trouvé"));
 
         if (client.getStatus() == 0) {
             throw new CustomValidationException("Client déjà approuvé");
         }
-
+        System.out.println("from service" + NumeroCompte);
         client.setStatus(0);
-        client.setNumeroCompte(newNumeroCompte);
+        client.setNumeroCompte(NumeroCompte);
         clientRepository.save(client);
 
         String subject = "Félicitations ! Vous êtes approuvé";
         String message = "Cher " + client.getNom() + ",\n\n" +
                 "Félicitations ! Vous êtes maintenant approuvé en tant que client de ClientKeeper.\n" +
-                "Voici votre nouveau numéro de compte : " + newNumeroCompte + "\n\n" +
+                "Voici votre nouveau numéro de compte : " + NumeroCompte + "\n\n" +
                 "Merci de faire confiance à notre banque.\n\n" +
                 "Cordialement,\nL'équipe ClientKeeper.";
 
@@ -118,7 +118,6 @@ public class ClientServiceImpl implements ClientService {
     }
 
 
-
     @Override
     public List<ClientDTO> getNoAppClients() {
         List<Client> clients = clientRepository.findByStatus(1);
@@ -142,6 +141,7 @@ public class ClientServiceImpl implements ClientService {
 
         utilisateurRepository.delete(utilisateur);
     }
+
 
     @Override
     public ClientDTO getClientByEmail(String email) {

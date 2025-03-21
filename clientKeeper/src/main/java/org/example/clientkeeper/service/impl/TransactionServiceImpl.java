@@ -80,7 +80,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Map<LocalDate, List<TransactionDTO>> getUserTransactionHistory(String userEmail) {
+    public Map<LocalDate, List<TransactionDetailsDTO>> getUserTransactionHistory(String userEmail) {
         Utilisateur utilisateur = utilisateurRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new CustomValidationException("Utilisateur non trouvé."));
 
@@ -88,25 +88,25 @@ public class TransactionServiceImpl implements TransactionService {
                 .orElseThrow(() -> new CustomValidationException("Client introuvable."));
 
         // Transactions émises
-        List<TransactionDTO> sentTransactions = transactionRepository.findBySender(client).stream()
+        List<TransactionDetailsDTO> sentTransactions = transactionRepository.findBySender(client).stream()
                 .map(transaction -> {
-                    TransactionDTO dto = transactionMapper.toDTO(transaction);
+                    TransactionDetailsDTO dto = transactionMapper.toDetailsDTO(transaction);
                     dto.setTypeTransaction("emise");
                     return dto;
                 })
                 .toList();
 
         // Transactions reçues
-        List<TransactionDTO> receivedTransactions = transactionRepository.findByReceiver(client).stream()
+        List<TransactionDetailsDTO> receivedTransactions = transactionRepository.findByReceiver(client).stream()
                 .map(transaction -> {
-                    TransactionDTO dto = transactionMapper.toDTO(transaction);
+                    TransactionDetailsDTO dto = transactionMapper.toDetailsDTO(transaction);
                     dto.setTypeTransaction("recue");
                     return dto;
                 })
                 .toList();
 
         // Fusion des transactions
-        List<TransactionDTO> allTransactions = new ArrayList<>();
+        List<TransactionDetailsDTO> allTransactions = new ArrayList<>();
         allTransactions.addAll(sentTransactions);
         allTransactions.addAll(receivedTransactions);
 
@@ -114,6 +114,7 @@ public class TransactionServiceImpl implements TransactionService {
         return allTransactions.stream()
                 .collect(Collectors.groupingBy(dto -> dto.getDateTransaction().toLocalDate()));
     }
+
 
     @Override
     public List<TransactionDetailsDTO> getAllTransactions() {

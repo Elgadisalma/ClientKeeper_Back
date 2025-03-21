@@ -9,10 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface TransactionService {
-//    @Transactional
     void transferMoney(String senderEmail, TransactionDTO transactionDTO);
 
-    Map<LocalDate, List<TransactionDTO>> getUserTransactionHistory(String userEmail);
+    Map<LocalDate, List<TransactionDetailsDTO>> getUserTransactionHistory(String userEmail);
 
     List<TransactionDetailsDTO> getAllTransactions();
 }

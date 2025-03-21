@@ -48,6 +48,7 @@ public class ClientController {
     @PutMapping("/approveClient")
     public ResponseEntity<String> approveClient(@RequestBody ApproveClientRequest request) {
         clientService.approveClient(request.getUserId(), request.getNumeroCompte());
+        System.out.println("from controller" + request.getNumeroCompte());
         return ResponseEntity.ok("Client approuvé avec succès, email envoyé !");
     }
 

@@ -99,6 +99,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             Client client = (Client) user;
             status = client.getStatus();
 
+            if (client.getStatus() == 1) {
+                throw new RuntimeException("Votre compte est en attente de validation.");
+            }
+
             historiqueConnexionService.enregistrerConnexion(client);
         }
 
