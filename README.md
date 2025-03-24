@@ -1,3 +1,4 @@
+
 # ClientKeeper - Backend
 
 ClientKeeper est un backend Spring Boot conçu pour gérer les opérations bancaires, sécuriser les données sensibles, et intégrer des fonctionnalités d’intelligence artificielle pour analyser le risque de churn et générer des offres personnalisées.
@@ -8,6 +9,7 @@ ClientKeeper est un backend Spring Boot conçu pour gérer les opérations banca
 1. [Prérequis](#prérequis)
 2. [Installation](#installation)
 3. [Fonctionnalités](#fonctionnalités)
+4. [Tests](#tests)
 
 ---
 
@@ -49,22 +51,21 @@ Avant de démarrer, assurez-vous d’avoir installé les éléments suivants :
    mvn spring-boot:run
    ```
 
-L’application sera disponible à l’adresse : [http://localhost:8080](http://localhost:8080).
+   L’application sera disponible à l’adresse : [http://localhost:8080](http://localhost:8080).
 
 5. **Exécuter l’intelligence artificielle**
-   Une partie de l’application repose sur un moteur d’IA externe écrit en Python. Voici les étapes pour le configurer :
-   
-   - Accédez au répertoire AI (à cloner séparément si nécessaire) :
-     ```bash
-     git clone https://github.com/votre-repo/clientkeeper-ai.git
-     cd clientkeeper-ai
-     ```
 
-   - Créez un environnement virtuel et installez les dépendances :
+   Une partie de l’application repose sur un moteur d’IA externe écrit en Python. Voici les étapes pour le configurer :
+
+   - Créez un environnement virtuel et activez-le :
      ```bash
      python -m venv env
-     source env/bin/activate   # Utilisez env\Scripts\activate sous Windows
-     pip install -r requirements.txt
+     env\Scriptsctivate  # Utilisez `source env/bin/activate` sur Linux/macOS
+     ```
+
+   - Installez les dépendances nécessaires :
+     ```bash
+     pip install tensorflow flask joblib numpy pandas scikit-learn
      ```
 
    - Entraînez le modèle :
@@ -77,7 +78,7 @@ L’application sera disponible à l’adresse : [http://localhost:8080](http://
      python app.py
      ```
 
-   - L’API sera disponible à : [http://localhost:5000](http://localhost:5000).
+   - L’API Flask sera disponible à : [http://localhost:5000](http://localhost:5000).
 
 ---
 
@@ -110,5 +111,5 @@ L’application sera disponible à l’adresse : [http://localhost:8080](http://
    ```
 
 ---
-**© 2025 ClientKeeper**
 
+**© 2025 ClientKeeper**
