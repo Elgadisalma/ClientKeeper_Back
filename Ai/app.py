@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 import tensorflow as tf
-import numpy as np
-import joblib
+import numpy as np  # pour transformer les données d'entrée
+import joblib #charger le scaler
 
 app = Flask(__name__)
 
